@@ -14,6 +14,8 @@ The program was tested on the following systems:
 
 Running:
 
+python rtrl_gui2.py
+
 When running the program for the first time a large delay is expected as the theano graph is being compiled.
 
 Run the program and enter binary digits (0 or 1) as randomly as you can and the program will attempt to guess your next digit. In general, humans are not good at generating trully random sequences. 
