@@ -8,7 +8,6 @@ theano
 PyQt4
 
 If you have python-xy installed on windows, the only additional dependency you need is theano.
-First time run may take a while as python files are being compiled.
 The program was tested on the following systems:
   Windows 7 with python 2.7 32 bits without GPU (cpu only).
   Ubuntu 14.04 with python 2.7 64 bits without GPU (cpu only).
@@ -28,7 +27,7 @@ The implementation of the neural network was according to:
 Neural Networks: Automata and Formal Models of Computation
 Mikel L. Forcada 
 Universitat d'Alacant, 
-Dept. Llenguatges i Sistemes Inform‡tics, 
+Dept. Llenguatges i Sistemes Inform√†tics, 
 E-03071 Alacant (Spain).
 
 http://www.dlsi.ua.es/~mlf/nnafmc/pbook/node18.html
