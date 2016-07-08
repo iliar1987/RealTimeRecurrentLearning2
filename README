@@ -8,16 +8,17 @@ theano
 PyQt4
 
 If you have python-xy installed on windows, the only additional dependency you need is theano.
-First time run may take a while as python files are being compiled.
 The program was tested on the following systems:
   Windows 7 with python 2.7 32 bits without GPU (cpu only).
   Ubuntu 14.04 with python 2.7 64 bits without GPU (cpu only).
 
 Running:
 
+python rtrl_gui2.py
+
 When running the program for the first time a large delay is expected as the theano graph is being compiled.
 
-Run the program and enter binary digits (0 or 1) as randomly as you can and the program will attempt to guess your next digit. In general, umans are not good at generating trully random sequences. 
+Run the program and enter binary digits (0 or 1) as randomly as you can and the program will attempt to guess your next digit. In general, humans are not good at generating trully random sequences. 
 Spectrogram of the input and output sequences can be drawn, as well as the current state of the neural network, including current excitations and weight matrices.
 The state of the neural network can be saved for later use, as well as the input sequence that was used to train it.
 
@@ -28,7 +29,7 @@ The implementation of the neural network was according to:
 Neural Networks: Automata and Formal Models of Computation
 Mikel L. Forcada 
 Universitat d'Alacant, 
-Dept. Llenguatges i Sistemes Inform‡tics, 
+Dept. Llenguatges i Sistemes Inform√†tics, 
 E-03071 Alacant (Spain).
 
 http://www.dlsi.ua.es/~mlf/nnafmc/pbook/node18.html
