@@ -16,7 +16,7 @@ Running:
 
 When running the program for the first time a large delay is expected as the theano graph is being compiled.
 
-Run the program and enter binary digits (0 or 1) as randomly as you can and the program will attempt to guess your next digit. In general, umans are not good at generating trully random sequences. 
+Run the program and enter binary digits (0 or 1) as randomly as you can and the program will attempt to guess your next digit. In general, humans are not good at generating trully random sequences. 
 Spectrogram of the input and output sequences can be drawn, as well as the current state of the neural network, including current excitations and weight matrices.
 The state of the neural network can be saved for later use, as well as the input sequence that was used to train it.
 
