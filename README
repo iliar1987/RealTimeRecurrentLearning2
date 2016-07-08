@@ -1,0 +1,40 @@
+Installation:
+
+Dependencies:
+python 2.7
+numpy
+matplotlib
+theano
+PyQt4
+
+If you have python-xy installed on windows, the only additional dependency you need is theano.
+First time run may take a while as python files are being compiled.
+The program was tested on the following systems:
+  Windows 7 with python 2.7 32 bits without GPU (cpu only).
+  Ubuntu 14.04 with python 2.7 64 bits without GPU (cpu only).
+
+Running:
+
+When running the program for the first time a large delay is expected as the theano graph is being compiled.
+
+Run the program and enter binary digits (0 or 1) as randomly as you can and the program will attempt to guess your next digit. In general, umans are not good at generating trully random sequences. 
+Spectrogram of the input and output sequences can be drawn, as well as the current state of the neural network, including current excitations and weight matrices.
+The state of the neural network can be saved for later use, as well as the input sequence that was used to train it.
+
+Principle of Operation:
+
+The implementation of the neural network was according to:
+
+Neural Networks: Automata and Formal Models of Computation
+Mikel L. Forcada 
+Universitat d'Alacant, 
+Dept. Llenguatges i Sistemes Informàtics, 
+E-03071 Alacant (Spain).
+
+http://www.dlsi.ua.es/~mlf/nnafmc/pbook/node18.html
+
+The neural network was implemented by using the theano python library for symbolic computations. In each time step, the hidden state of the network is updated according to its previous state and the input, and the output is calculated. Then, the weights are updated according to back propagation. In order to avoid back-propagation through time (BPTT), the gradients of the cost function are stored and updated at each time step.
+
+The excitation function for the hidden state was chosen as tanh, and for the network output a sigmoid function was used. The cost function was chosen to be binary cross entropy.
+
+As the neural network is trained, the excitations of the neurons tend to become closer to 1 or -1, which possibly leads to vanishing gradients and slowed down learning. In order to avoid this behaviour a heuristic solution was implemented. An additional cost is added for the closeness of the excitation values to 1 and -1, so called "deviation cost". This additional cost forces the neural network to prefer such weights which lead to excitation values closer to zero. This option can be turned on by a checkbox in the main gui, and the parameters alpha and beta can be tuned, where, alpha and beta are the coefficients by which the deviation costs of the hidden state and the output are multiplied respectively.
