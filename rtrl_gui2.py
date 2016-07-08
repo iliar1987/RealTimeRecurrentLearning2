@@ -13,6 +13,8 @@ import matplotlib as mpl
 
 import sys
 
+print ("Loading may take a several minutes! Please be patient.")
+
 try:    
     mpl.use(u'Qt4Agg',force=True)
 except:
@@ -593,8 +595,20 @@ class MainWidget(QtGui.QMainWindow):
             ".",
             filter = ("Neural Network State Files (*.rtrl2);;All Files (*.*)"))
         if not len(fname)==0:
-            with open(fname,'rb') as f:
-                state = cPickle.load(f)
+            try:
+                with open(fname,'rb') as f:
+                    state = cPickle.load(f)
+            except ImportError:
+                err_msg = "The pickle file: %s for the state is incompatible with this system (was created on a different system)." % fname
+                print >> sys.stderr, err_msg
+                err_box = QtGui.QMessageBox.critical(self,"Pickle Load Error",err_msg)
+                return
+            except Exception as e:
+                err_msg = "The pickle file: %s failed loading" % fname
+                print >> sys.stderr,err_msg
+                print >>sys.stderr,str(e)
+                err_box = QtGui.QMessageBox.critical(self,"Pickle Load Error",err_msg)
+                return
             rnn1.SetState(state)
             
 #            if 'learning_rate' in state:
@@ -717,6 +731,9 @@ class MainWidget(QtGui.QMainWindow):
             self.close()
         elif c == '0' or c == '1':
             self.Insert_0_1(c)
+    def closeEvent(self, event): 
+        print "Closing" 
+        app.exit()
 
 
 import rtrl2
@@ -765,8 +782,13 @@ if not starting_state_fname is None:
             state = cPickle.load(f)
         rnn1.SetState(state)
         UpdateParamsFromState(state)
-    except:
-        print >> sys.stderr, "could not open default network state file: %s, continuing with randomized network."%starting_state_fname
+    except Exception as e:
+        print >> sys.stderr, "Could not open default network state file: %s, continuing with randomized network."%starting_state_fname
+        if isinstance(e,ImportError):
+            print >> sys.stderr, "Possible reason is that the pickle file for the state was created on a different system (please continue with randomized state)."
+        else:
+            print >> sys.stderr, str(e)
+        
         rnn1.Reset(nx_default)
 
 def GetRTRL_Guess(return_sureness=False):
@@ -783,6 +805,7 @@ def MakeRTRL_Step(v_char):
     rnn1.MakeStep(v,**params)
 
 def main():
+    global app
     app = QtGui.QApplication([])
     ex = MainWidget()
     app.exec_()
