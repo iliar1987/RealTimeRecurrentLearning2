@@ -25,7 +25,7 @@ def EnableDeviationCosts():
 
 def DisableDeviationCosts():
     global use_deviation_costs
-    use_deviation_costs=True
+    use_deviation_costs=False
     RTRL2.alpha_default_value=0.0
     RTRL2.beta_default_value=0.0
 
