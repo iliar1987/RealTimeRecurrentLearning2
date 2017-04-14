@@ -5,7 +5,7 @@ Created on Wed Nov 18 13:09:21 2015
 @author: Ilia
 """
 
-from PyQt5 import QtCore,QtGui,QtWidgets
+from PyQt4 import QtGui,QtCore
 import numpy as np
 import colorsys
 import cPickle
@@ -16,7 +16,7 @@ import sys
 print ("Loading may take a several minutes! Please be patient.")
 
 try:    
-    mpl.use(u'Qt5Agg',force=True)
+    mpl.use(u'Qt4Agg',force=True)
 except:
     print >> sys.stderr, "error loading mpl (no plotting will be available)"
 
@@ -35,17 +35,17 @@ import RTRL_plot
 def GetCurrentNx():
     return rnn1.nx
 
-#class ParameterTable(QtWidgets.QTableView):
+#class ParameterTable(QtGui.QTableView):
 #    def __init__(self,parent):
 #        super(ParameterTable,self).__init__(parent)
 #        self.parent = parent
 #        self.Populate()
 #        self.AdjustGeometry()
 #    def Populate(self):
-#        model = QtWidgets.QStandardItemModel(4,2,self)
-#        model.setHorizontalHeaderItem(0, QtWidgets.QStandardItem("Parameter"))
-#        model.setHorizontalHeaderItem(1, QtWidgets.QStandardItem("Value"))
-#        firstRow = QtWidgets.QStandardItem("ColumnValue")
+#        model = QtGui.QStandardItemModel(4,2,self)
+#        model.setHorizontalHeaderItem(0, QtGui.QStandardItem("Parameter"))
+#        model.setHorizontalHeaderItem(1, QtGui.QStandardItem("Value"))
+#        firstRow = QtGui.QStandardItem("ColumnValue")
 #        model.setItem(0,0,firstRow)
 #        self.setModel(model)
 #        self.model = model
@@ -60,7 +60,7 @@ def GetCurrentNx():
 #            tableHeight += ui->tableWidget->rowHeight(i);
 #}        rect.setHeight(tableHeight);
 
-class ParameterEditItem(QtWidgets.QLineEdit):
+class ParameterEditItem(QtGui.QLineEdit):
     def __init__(self,parent,main_widget,name,callback,index,value,validator,dtype):
         super(ParameterEditItem,self).__init__(value,parent)
         self.name = name
@@ -99,7 +99,7 @@ class ParameterEditItem(QtWidgets.QLineEdit):
         
 from collections import defaultdict
 
-class ParameterTable(QtWidgets.QTableWidget):
+class ParameterTable(QtGui.QTableWidget):
     def __init__(self,parent):
         super(ParameterTable,self).__init__(parent)
         self.parent = parent
@@ -134,7 +134,7 @@ class ParameterTable(QtWidgets.QTableWidget):
         self.setColumnCount(2)
         self.setHorizontalHeaderLabels(["Parameter","Value"])
         for i,pname in enumerate(self.param_names):
-            item_pname = QtWidgets.QTableWidgetItem(pname)
+            item_pname = QtGui.QTableWidgetItem(pname)
             item_pname.setFlags(\
                 QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
             self.setItem(i,0,item_pname)
@@ -161,10 +161,10 @@ class ParameterTable(QtWidgets.QTableWidget):
                 params[pname] = self.param_edits[pname].GetValue()
     def NxChanged(self,item):
         if item.GetValue() != GetCurrentNx():
-            result = QtWidgets.QMessageBox.question(self.parent,'Confirm Reset',
+            result = QtGui.QMessageBox.question(self.parent,'Confirm Reset',
                                        'Changing this parameter requires reset, \ndo you want to reset the neural network?',
-                                       QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,QtWidgets.QMessageBox.No)
-            if result == QtWidgets.QMessageBox.Yes:
+                                       QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,QtGui.QMessageBox.No)
+            if result == QtGui.QMessageBox.Yes:
                 new_nx = self.param_edits['nx'].GetValue()
                 self.parent.ResetNeuralNetwork(new_nx)
             else:
@@ -250,7 +250,7 @@ def DeleteLastChar(edit):
     edit.textCursor().deletePreviousChar()
     edit.moveCursor(QtGui.QTextCursor.End)
 
-class MainWidget(QtWidgets.QMainWindow):
+class MainWidget(QtGui.QMainWindow):
     
     def __init__(self):
         super(MainWidget, self).__init__()
@@ -259,49 +259,49 @@ class MainWidget(QtWidgets.QMainWindow):
         
     def initUI(self):
         
-        QtWidgets.QToolTip.setFont(QtGui.QFont('SansSerif', 10))
+        QtGui.QToolTip.setFont(QtGui.QFont('SansSerif', 10))
         
         self.setToolTip('type 1\'s and 0\'s')
         
-        exitAction = QtWidgets.QAction(QtGui.QIcon('exit.png'), '&Exit', self)        
+        exitAction = QtGui.QAction(QtGui.QIcon('exit.png'), '&Exit', self)        
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(self.close)
         
-        saveStateAction = QtWidgets.QAction(QtGui.QIcon('icons/16x16/actions/document-save.png'), '&Save State As...', self)        
+        saveStateAction = QtGui.QAction(QtGui.QIcon('icons/16x16/actions/document-save.png'), '&Save State As...', self)        
         saveStateAction.setShortcut('Ctrl+S')
         saveStateAction.setStatusTip('Save State As...')
         saveStateAction.triggered.connect(self.SaveStateAsAction)
         
-        loadStateAction = QtWidgets.QAction(QtGui.QIcon('icons/16x16/actions/document-open.png'), '&Load State...', self)        
+        loadStateAction = QtGui.QAction(QtGui.QIcon('icons/16x16/actions/document-open.png'), '&Load State...', self)        
         loadStateAction.setShortcut('Ctrl+O')
         loadStateAction.setStatusTip('Load State...')
         loadStateAction.triggered.connect(self.LoadStateAction)
         
-        insertSeqAction = QtWidgets.QAction(QtGui.QIcon('icons/16x16/actions/document-open.png'), '&Insert From File...',self)
+        insertSeqAction = QtGui.QAction(QtGui.QIcon('icons/16x16/actions/document-open.png'), '&Insert From File...',self)
         insertSeqAction.setStatusTip('Insert an input sequence from file...')
         insertSeqAction.triggered.connect(self.InsertSeqFromFileAction)
         
-        saveInputAction = QtWidgets.QAction(QtGui.QIcon('icons/16x16/actions/document-save.png'), '&Save Inputs...',self)
+        saveInputAction = QtGui.QAction(QtGui.QIcon('icons/16x16/actions/document-save.png'), '&Save Inputs...',self)
         saveInputAction.setStatusTip('Save the inputs to a file...')
         saveInputAction.triggered.connect(self.SaveInputAction)
         
-        saveGuessesAction = QtWidgets.QAction(QtGui.QIcon('icons/16x16/actions/document-save.png'), 'Save &Guesses...',self)
+        saveGuessesAction = QtGui.QAction(QtGui.QIcon('icons/16x16/actions/document-save.png'), 'Save &Guesses...',self)
         saveGuessesAction.setStatusTip('Save the guesses to a file...')
         saveGuessesAction.triggered.connect(self.SaveGuessesAction)
         
         if True:
-            pasteInputAction = QtWidgets.QAction(QtGui.QIcon('icons/16x16/actions/edit-paste.png'), '&Paste Input',self)
+            pasteInputAction = QtGui.QAction(QtGui.QIcon('icons/16x16/actions/edit-paste.png'), '&Paste Input',self)
             pasteInputAction.setShortcut('Ctrl+V')
             pasteInputAction.setStatusTip('Paste Input Sequence from Clipboard...')
             pasteInputAction.triggered.connect(self.PasteInputFromClipboard)
             
-            copyInputAction = QtWidgets.QAction(QtGui.QIcon('icons/16x16/actions/edit-copy.png'), '&Copy Input',self)
+            copyInputAction = QtGui.QAction(QtGui.QIcon('icons/16x16/actions/edit-copy.png'), '&Copy Input',self)
             copyInputAction.setShortcut('Ctrl+C')
             copyInputAction.setStatusTip('Copy Input Sequence to Clipboard...')
             copyInputAction.triggered.connect(self.CopyInputToClipboard)
         
-        clearInputAction = QtWidgets.QAction(QtGui.QIcon('icons/16x16/actions/edit-clear-all.png'), 'C&lear',self)
+        clearInputAction = QtGui.QAction(QtGui.QIcon('icons/16x16/actions/edit-clear-all.png'), 'C&lear',self)
         clearInputAction.setStatusTip('Copy Input and Guess Sequence...')
         clearInputAction.triggered.connect(self.ClearSequence)
         
@@ -326,7 +326,7 @@ class MainWidget(QtWidgets.QMainWindow):
         sequenceMenu.addAction(clearInputAction)
         
         self.parameter_table = ParameterTable(self)
-        self.deviationCostsCheckBox = QtWidgets.QCheckBox('Enable deviation costs (experimental): ',self)
+        self.deviationCostsCheckBox = QtGui.QCheckBox('Enable deviation costs (experimental): ',self)
         self.deviationCostsCheckBox.stateChanged.connect(self.deviationCostsCheckBoxTicked)
 
         if not rtrl2.UsingDeviationCosts():
@@ -337,47 +337,47 @@ class MainWidget(QtWidgets.QMainWindow):
             self.deviationCostsCheckBox.setCheckState(True)
 #        self.clicked.connect(self.setFocus)
         
-        self.draw_specgram_button = QtWidgets.QPushButton("Draw Spectrogram")
+        self.draw_specgram_button = QtGui.QPushButton("Draw Spectrogram")
         self.draw_specgram_button.clicked.connect(self.DrawSpecGram)
-        self.edit1 = QtWidgets.QTextEdit(self)
+        self.edit1 = QtGui.QTextEdit(self)
         self.edit1.setReadOnly(True)
         
-        self.edit2 = QtWidgets.QTextEdit(self)
+        self.edit2 = QtGui.QTextEdit(self)
         self.edit2.setReadOnly(True)
         
-        self.reset_count_button = QtWidgets.QPushButton('Reset Count',self)
+        self.reset_count_button = QtGui.QPushButton('Reset Count',self)
         self.reset_count_button.clicked.connect(self.OnClick_ResetCount)
         
-        self.reset_neural_network_button = QtWidgets.QPushButton('Reset\nNeural Network',self)
+        self.reset_neural_network_button = QtGui.QPushButton('Reset\nNeural Network',self)
         self.reset_neural_network_button.clicked.connect(self.OnClick_reset_neural_network)
         
-#        self.learning_rate_edit = QtWidgets.QLineEdit('%.3f'%params['learning_rate'],self)
-#        self.learning_rate_edit.setValidator(QtWidgets.QDoubleValidator(0.0,1.0,6))
+#        self.learning_rate_edit = QtGui.QLineEdit('%.3f'%params['learning_rate'],self)
+#        self.learning_rate_edit.setValidator(QtGui.QDoubleValidator(0.0,1.0,6))
 #        self.learning_rate_edit.returnPressed.connect(self.setFocus)
 #        self.learning_rate_edit.editingFinished.connect(self.UpdateLearningRate)
-#        self.learning_rate_hbox = QtWidgets.QHBoxLayout()
-#        self.learning_rate_hbox.addWidget(QtWidgets.QLabel("learning rate = "))
+#        self.learning_rate_hbox = QtGui.QHBoxLayout()
+#        self.learning_rate_hbox.addWidget(QtGui.QLabel("learning rate = "))
 #        self.learning_rate_hbox.addWidget(self.learning_rate_edit)
 #        
         self.plotters = {}
-        self.display_weight_plot_button = QtWidgets.QCheckBox('Display Weight Plot',self)
+        self.display_weight_plot_button = QtGui.QCheckBox('Display Weight Plot',self)
         self.plotters['weights'] = Plotter_Handler(self,rnn1,RTRL_plot.RTRL_Weight_Plotter,self.display_weight_plot_button)
-        self.display_gradients_plot_button = QtWidgets.QCheckBox('Display Gradients Plot',self)
+        self.display_gradients_plot_button = QtGui.QCheckBox('Display Gradients Plot',self)
         self.plotters['gradients'] = Plotter_Handler(self,rnn1,RTRL_plot.RTRL_Gradients_Plotter,self.display_gradients_plot_button)
         
-        self.sureness_label = QtWidgets.QLabel()
-        self.sureness_color_label = QtWidgets.QLabel()
+        self.sureness_label = QtGui.QLabel()
+        self.sureness_color_label = QtGui.QLabel()
         self.sureness_color_pixmap = QtGui.QPixmap (50,25)
         self.sureness_color_pixmap.fill(QtGui.QColor("transparent"))
         self.sureness_color_label.setPixmap(self.sureness_color_pixmap)
         self.next_guess_sureness = 0.5
         self.UpdateSureness()
         
-#        self.nx_label = QtWidgets.QLabel()
+#        self.nx_label = QtGui.QLabel()
 #        self.UpdateNxLabel()
-        self.percent_label = QtWidgets.QLabel('',self)
+        self.percent_label = QtGui.QLabel('',self)
         
-        self.vbox1 = QtWidgets.QVBoxLayout()
+        self.vbox1 = QtGui.QVBoxLayout()
         
         self.vbox1.addWidget(self.edit1,alignment = QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop )
         self.vbox1.addSpacing(10)
@@ -388,10 +388,10 @@ class MainWidget(QtWidgets.QMainWindow):
         self.vbox1.addWidget(self.sureness_color_label,alignment = QtCore.Qt.AlignCenter)
         
         
-        self.vbox2 = QtWidgets.QVBoxLayout()
+        self.vbox2 = QtGui.QVBoxLayout()
 
         self.vbox2.addWidget(self.percent_label,alignment = QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
-        self.color_drawing_place_label = QtWidgets.QLabel()
+        self.color_drawing_place_label = QtGui.QLabel()
         self.color_drawing_pixmap = QtGui.QPixmap (50,25)
         self.color_drawing_pixmap.fill(QtGui.QColor("transparent"))
         self.color_drawing_place_label.setPixmap(self.color_drawing_pixmap)
@@ -414,34 +414,34 @@ class MainWidget(QtWidgets.QMainWindow):
         self.vbox2.addWidget(self.deviationCostsCheckBox)
                
         
-        self.hbox1 = QtWidgets.QHBoxLayout()
-        dummy1=QtWidgets.QWidget()
+        self.hbox1 = QtGui.QHBoxLayout()
+        dummy1=QtGui.QWidget()
         dummy1.setLayout(self.vbox1)
         self.hbox1.addWidget(dummy1,alignment=QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
         
         
-        dummy2=QtWidgets.QWidget()
+        dummy2=QtGui.QWidget()
         dummy2.setLayout(self.vbox2)
         self.hbox1.addWidget(dummy2,alignment=QtCore.Qt.AlignRight | QtCore.Qt.AlignTop)
         
-        self.vbox4 = QtWidgets.QVBoxLayout()
+        self.vbox4 = QtGui.QVBoxLayout()
         self.vbox4.addWidget(self.parameter_table)
         self.vbox4.addSpacing(150)
         self.hbox1.addSpacing(20)
         self.hbox1.addLayout(self.vbox4)
         
 
-#        self.hbox2 = QtWidgets.QHBoxLayout()
+#        self.hbox2 = QtGui.QHBoxLayout()
 #        self.hbox2.addSpacing(100)
 #        self.hbox2.addSpacing(100)
         
-        self.vbox3 = QtWidgets.QVBoxLayout()
+        self.vbox3 = QtGui.QVBoxLayout()
         self.vbox3.addLayout(self.hbox1)
         self.vbox3.addSpacing(100)
 #        self.vbox3.addSpacing(10)
 #        self.vbox3.addLayout(self.hbox2)
         
-        self.central_widget = QtWidgets.QWidget(self)
+        self.central_widget = QtGui.QWidget(self)
         self.central_widget.setLayout(self.vbox3)
         self.setCentralWidget(self.central_widget)
         self.UpdateBarColor()
@@ -462,7 +462,7 @@ class MainWidget(QtWidgets.QMainWindow):
         x2 = np.array([float(c) for c in x2_s[:-1]])
         nfft = 16
         if (len(x1_s)<nfft):
-            QtWidgets.QMessageBox.critical(self,"Error","Not enough values in input, need at least %d" % nfft)
+            QtGui.QMessageBox.critical(self,"Error","Not enough values in input, need at least %d" % nfft)
             return
         plt.figure()
         a1 = plt.subplot(2,1,1)
@@ -479,10 +479,10 @@ class MainWidget(QtWidgets.QMainWindow):
         plt.ion()
         
     def deviationCostsCheckBoxTicked(self,state):
-        result = QtWidgets.QMessageBox.question(self,'Confirm Reset',
+        result = QtGui.QMessageBox.question(self,'Confirm Reset',
                                        'Changing this parameter requires reset, \ndo you want to reset the neural network?',
-                                       QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,QtWidgets.QMessageBox.No)
-        if result == QtWidgets.QMessageBox.Yes:
+                                       QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,QtGui.QMessageBox.No)
+        if result == QtGui.QMessageBox.Yes:
             state_bool= state == QtCore.Qt.Checked
             if state_bool:
                 rtrl2.EnableDeviationCosts()
@@ -509,7 +509,7 @@ class MainWidget(QtWidgets.QMainWindow):
     if True:
         def PasteInputFromClipboard(self):
             try:
-                cb = QtWidgets.QApplication.clipboard()
+                cb = QtGui.QApplication.clipboard()
                 s=str(cb.text(mode=cb.Clipboard))
             except:
                 print >> sys.stderr, 'couldn\'t access clipboard'
@@ -518,14 +518,14 @@ class MainWidget(QtWidgets.QMainWindow):
         def CopyInputToClipboard(self):
             s = str(self.edit1.toPlainText())
             try:
-                cb = QtWidgets.QApplication.clipboard()
+                cb = QtGui.QApplication.clipboard()
                 cb.clear(mode=cb.Clipboard )
                 cb.setText(s,mode=cb.Clipboard)
             except:
                 print >> sys.stderr, 'couldn\'t access clipboard'
 
     def InsertSeqFromFileAction(self):
-        fname = QtWidgets.QFileDialog.getOpenFileName(\
+        fname = QtGui.QFileDialog.getOpenFileName(\
             self,
             "Load Input Sequence from File:",
             ".",
@@ -535,7 +535,7 @@ class MainWidget(QtWidgets.QMainWindow):
                 s = f.readline()
             self.InsertSequence(s)
     def SaveInputAction(self):
-        fname = QtWidgets.QFileDialog.getSaveFileName(\
+        fname = QtGui.QFileDialog.getSaveFileName(\
             self,
             "Save Input Sequence As:",
             ".",
@@ -544,7 +544,7 @@ class MainWidget(QtWidgets.QMainWindow):
             with open(fname,'wb') as f:
                 f.writelines([str(self.edit1.toPlainText())])
     def SaveGuessesAction(self):
-        fname = QtWidgets.QFileDialog.getSaveFileName(\
+        fname = QtGui.QFileDialog.getSaveFileName(\
             self,
             "Save Guesses Sequence As:",
             ".",
@@ -589,7 +589,7 @@ class MainWidget(QtWidgets.QMainWindow):
 #    def UpdateNxLabel(self):
 #        self.nx_label.setText('nx = %d'%rnn1.nx)
     def LoadStateAction(self):
-        fname = QtWidgets.QFileDialog.getOpenFileName(\
+        fname = QtGui.QFileDialog.getOpenFileName(\
             self,
             "Load Network State File:",
             ".",
@@ -601,13 +601,13 @@ class MainWidget(QtWidgets.QMainWindow):
             except ImportError:
                 err_msg = "The pickle file: %s for the state is incompatible with this system (was created on a different system)." % fname
                 print >> sys.stderr, err_msg
-                err_box = QtWidgets.QMessageBox.critical(self,"Pickle Load Error",err_msg)
+                err_box = QtGui.QMessageBox.critical(self,"Pickle Load Error",err_msg)
                 return
             except Exception as e:
                 err_msg = "The pickle file: %s failed loading" % fname
                 print >> sys.stderr,err_msg
                 print >>sys.stderr,str(e)
-                err_box = QtWidgets.QMessageBox.critical(self,"Pickle Load Error",err_msg)
+                err_box = QtGui.QMessageBox.critical(self,"Pickle Load Error",err_msg)
                 return
             rnn1.SetState(state)
             
@@ -622,7 +622,7 @@ class MainWidget(QtWidgets.QMainWindow):
             self.RestartPlotters()
 #        print fname
     def SaveStateAsAction(self):
-        fname = QtWidgets.QFileDialog.getSaveFileName(\
+        fname = QtGui.QFileDialog.getSaveFileName(\
             self,
             "Save Network State File As:",
             ".",
@@ -641,7 +641,7 @@ class MainWidget(QtWidgets.QMainWindow):
         self.UpdateBarColor()
         self.UpdatePercentLabel()
     def GetInputNx(self):
-        result = QtWidgets.QInputDialog.getInt(self,"Set nx",
+        result = QtGui.QInputDialog.getInt(self,"Set nx",
                                   "nx = ",
                                   value=4,
                                   min=1,
@@ -732,7 +732,7 @@ class MainWidget(QtWidgets.QMainWindow):
         elif c == '0' or c == '1':
             self.Insert_0_1(c)
     def closeEvent(self, event): 
-        print ("Closing")
+        print "Closing" 
         app.exit()
 
 
@@ -806,7 +806,7 @@ def MakeRTRL_Step(v_char):
 
 def main():
     global app
-    app = QtWidgets.QApplication([])
+    app = QtGui.QApplication([])
     ex = MainWidget()
     app.exec_()
 
