@@ -1,16 +1,17 @@
-Installation:
+﻿Installation:
 
 Dependencies:
 python 2.7
 numpy
 matplotlib
 theano
-PyQt4
+PyQt5
+
+A branch exists for PyQt4: Py2_Qt4
 
 If you have python-xy installed on windows, the only additional dependency you need is theano.
 The program was tested on the following systems:
-  Windows 7 with python 2.7 32 bits without GPU (cpu only).
-  Ubuntu 14.04 with python 2.7 64 bits without GPU (cpu only).
+  Windows 10 with python 2.7 32 bits without GPU (cpu only).
 
 Running:
 
