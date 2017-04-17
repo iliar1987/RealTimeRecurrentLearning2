@@ -531,7 +531,7 @@ class MainWidget(QtWidgets.QMainWindow):
             ".",
             filter = ("Sequence Files (*.seq);;Text Files (*.txt);;All Files (*.*)"))
         if not len(fname)==0:
-            with open(fname,'rb') as f:
+            with open(fname,'r') as f:
                 s = f.readline()
             self.InsertSequence(s)
     def SaveInputAction(self):
@@ -541,7 +541,7 @@ class MainWidget(QtWidgets.QMainWindow):
             ".",
             filter = ("Sequence Files (*.seq);;Text Files (*.txt);;All Files (*.*)"))
         if not len(fname)==0:
-            with open(fname,'wb') as f:
+            with open(fname,'w') as f:
                 f.writelines([str(self.edit1.toPlainText())])
     def SaveGuessesAction(self):
         fname = QtWidgets.QFileDialog.getSaveFileName(\
@@ -550,7 +550,7 @@ class MainWidget(QtWidgets.QMainWindow):
             ".",
             filter = ("Sequence Files (*.seq);;Text Files (*.txt);;All Files (*.*)"))
         if not len(fname)==0:
-            with open(fname,'wb') as f:
+            with open(fname,'w') as f:
                 f.writelines([str(self.edit2.toPlainText())[:-1]])
     def mousePressEvent(self,e):
         self.setFocus()
@@ -596,7 +596,7 @@ class MainWidget(QtWidgets.QMainWindow):
             filter = ("Neural Network State Files (*.rtrl2);;All Files (*.*)"))
         if not len(fname)==0:
             try:
-                with open(fname,'rb') as f:
+                with open(fname,'r') as f:
                     state = cPickle.load(f)
             except ImportError:
                 err_msg = "The pickle file: %s for the state is incompatible with this system (was created on a different system)." % fname
@@ -628,7 +628,7 @@ class MainWidget(QtWidgets.QMainWindow):
             ".",
             filter = ("Neural Network State Files (*.rtrl2);;All Files (*.*)"))
         if not len(fname)==0:
-            with open(fname,'wb') as f:
+            with open(fname,'w') as f:
                 state = rnn1.GetState()
 #                state['learning_rate'] = params['learning_rate']
                 state = UpdateStateFromParams(state)
@@ -778,7 +778,7 @@ HardResetNetwork()
 
 if not starting_state_fname is None:
     try:
-        with open(starting_state_fname,'rb') as f:
+        with open(starting_state_fname,'r') as f:
             state = cPickle.load(f)
         rnn1.SetState(state)
         UpdateParamsFromState(state)
